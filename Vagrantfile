@@ -40,6 +40,7 @@ Vagrant.configure("2") do |config|
     master.vm.provision "shell", path: "https://raw.githubusercontent.com/nbnodejs/vagrant-scripts/master/puppet_master.sh"
   end
 
+
   config.vm.define "client" do |client|
     client.vm.hostname = "client"
     client.vm.network "private_network", ip: "192.168.10.11"
@@ -50,6 +51,18 @@ Vagrant.configure("2") do |config|
       source: "./puppet-client/hosts.client",
       destination: "/vagrant/hosts.client"
     client.vm.provision "shell", path: "https://raw.githubusercontent.com/nbnodejs/vagrant-scripts/master/puppet_client.sh"
+  end
+
+  config.vm.define "newnode" do |newnode|
+    newnode.vm.hostname = "client"
+    newnode.vm.network "private_network", ip: "192.168.10.12"
+    newnode.vm.provision "file",
+      source: "./puppet-client/files/puppet.conf.client",
+      destination: "/vagrant/puppets.conf.client"
+    newnode.vm.provision "file",
+      source: "./puppet-client/hosts.client",
+      destination: "/vagrant/hosts.client"
+    newnode.vm.provision "shell", path: "https://raw.githubusercontent.com/nbnodejs/vagrant-scripts/master/puppet_client.sh"
   end
 
 end
